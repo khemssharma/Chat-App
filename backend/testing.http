@@ -1,10 +1,11 @@
 # Install "REST Client" extension on VS Code
 # Click on "Send Request" link above each request to execute it
 
-#Check if the server is running
+### Check if the server is running
 GET http://localhost:5000/
 
 ### Register a new user
+
 POST http://localhost:5000/api/auth/signup
 Content-Type: application/json
 
@@ -16,6 +17,28 @@ Content-Type: application/json
 
 ### Login a user
 POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+
+### Get user Details
+GET  http://localhost:5000/api/auth/checkAuth
+
+### post request for updating profile picture
+POST http://localhost:5000/api/auth/changeProfilePic
+Content-Type: application/json
+
+{
+  "email": "john.doe@example.com",
+  "password": "password123",
+  "profilePicUrl": "http://example.com/path/to/profile-pic.jpg"
+}
+
+### Logout 
+POST http://localhost:5000/api/auth/logout
 Content-Type: application/json
 
 {
