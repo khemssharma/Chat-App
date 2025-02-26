@@ -49,9 +49,14 @@ export const login = async (req, res) => {
 
         //generate jwt token
         generateToken(user._id, res);
-        res.status(200).json({ message: 'Login successful' });
-    } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(200).json({
+            _id: user._id,
+            fullName: user.fullname,
+            email: user.email,
+            profilePic: user.profilePic,
+          });
+        } catch (error) {
+        res.status(400).json({ message: error.message,  });
     }
 };
 

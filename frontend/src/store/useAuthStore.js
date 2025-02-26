@@ -19,7 +19,7 @@ export const useAuthStore = create((set, get) => ({
       const res = await axiosInstance.get("/auth/checkAuth");
 
       set({ authUser: res.data });
-      // get().connectSocket();
+      get().connectSocket();
     } catch (error) {
       console.log("Error in checkAuth:", error);
       set({ authUser: null });
@@ -45,6 +45,7 @@ export const useAuthStore = create((set, get) => ({
     set({ isLoggingIn: true });
     try {
       const res = await axiosInstance.post("/auth/login", data);
+      // console.log("data-->"+data);
       set({ authUser: res.data });
       toast.success("Logged in successfully");
 

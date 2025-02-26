@@ -44,7 +44,7 @@ export const sendMessage = async (req, res) => {
         })
         await newMessage.save();
 
-        // logic for realtime chat functionality using socket.io
+        // TODO
         // io.emit('message', newMessage);
         res.status(201).json(newMessage);
     }catch(error){
