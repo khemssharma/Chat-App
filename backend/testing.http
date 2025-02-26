@@ -41,7 +41,20 @@ Content-Type: application/json
 POST http://localhost:5000/api/auth/logout
 Content-Type: application/json
 
+### Get users for sidebar
+GET http://localhost:5000/api/messages/users
+Authorization: Bearer <your_token_here>
+
+### Get messages for a specific user
+GET http://localhost:5000/api/messages/67be0111c80553c8e384062e
+Authorization: Bearer <your_token_here>
+
+### Send a message to a specific user
+POST http://localhost:5000/api/messages/send/67be0111c80553c8e384062e
+Authorization: Bearer <your_token_here>
+Content-Type: application/json
+
 {
-  "email": "john.doe@example.com",
-  "password": "password123"
+  "text": "Hello, this is a test message!",
+  "image": ""
 }
