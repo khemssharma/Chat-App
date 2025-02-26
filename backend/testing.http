@@ -11,8 +11,8 @@ Content-Type: application/json
 
 {
   "fullname": "John Doe",
-  "email": "john.doe@example.com",
-  "password": "passw"
+  "email": "john.doo@example.com",
+  "password": "password"
 }
 
 ### Login a user
@@ -34,7 +34,7 @@ Content-Type: application/json
 {
   "email": "john.doe@example.com",
   "password": "password123",
-  "profilePicUrl": "http://example.com/path/to/profile-pic.jpg"
+  "profilePic": "../frontend/public/avatar.png"
 }
 
 ### Logout 
