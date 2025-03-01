@@ -29,7 +29,7 @@ export const signup = async (req, res) => {
             await newUser.save();
             res.status(201).json({
                 _id: newUser._id,
-                fullName: newUser.fullname,
+                fullname: newUser.fullname,
                 email: newUser.email,
                 profilePic: newUser.profilePic,
             });
@@ -56,7 +56,7 @@ export const login = async (req, res) => {
         generateToken(user._id, res);
         res.status(200).json({
             _id: user._id,
-            fullName: user.fullname,
+            fullname: user.fullname,
             email: user.email,
             profilePic: user.profilePic,
           });
