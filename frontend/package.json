@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^1.7.9",
+    "chat-app": "file:..",
     "dotenv": "^16.4.7",
     "lucide-react": "^0.476.0",
     "react": "^18.2.0",
