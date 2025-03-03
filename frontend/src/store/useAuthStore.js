@@ -3,8 +3,6 @@ import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
-
 export const useAuthStore = create((set, get) => ({
   authUser: null,
   isSigningUp: false,
@@ -86,7 +84,7 @@ export const useAuthStore = create((set, get) => ({
     const { authUser } = get();
     if (!authUser || get().socket?.connected) return;
 
-    const socket = io(BASE_URL, {
+    const socket = io("http://localhost:5000", {
       query: {
         userId: authUser._id,
       },
