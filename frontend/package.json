@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
+        "daisyui": "^4.7.2",
     "axios": "^1.7.9",
     "chat-app": "file:..",
     "dotenv": "^16.4.7",
