@@ -3,6 +3,8 @@ import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
+const BASE_URL = "https://chat-app-tgbj.onrender.com";
+
 export const useAuthStore = create((set, get) => ({
   authUser: null,
   isSigningUp: false,
@@ -46,7 +48,6 @@ export const useAuthStore = create((set, get) => ({
       const res = await axiosInstance.post("/auth/login", data);
       set({ authUser: res.data });
       toast.success("Logged in successfully");
-
       get().connectSocket();
     } catch (error) {
       toast.error(error.response.data.message);
@@ -63,6 +64,20 @@ export const useAuthStore = create((set, get) => ({
       get().disconnectSocket();
     } catch (error) {
       toast.error(error.response.data.message);
+    }
+  },
+
+  googleLogin: async (accessToken) => {
+    set({ isLoggingIn: true });
+    try {
+      const res = await axiosInstance.post("/auth/google", { access_token: accessToken });
+      set({ authUser: res.data });
+      toast.success("Logged in with Google successfully");
+      get().connectSocket();
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Google login failed");
+    } finally {
+      set({ isLoggingIn: false });
     }
   },
 
@@ -84,7 +99,7 @@ export const useAuthStore = create((set, get) => ({
     const { authUser } = get();
     if (!authUser || get().socket?.connected) return;
 
-    const socket = io("https://chat-app-tgbj.onrender.com", {
+    const socket = io(BASE_URL, {
       query: {
         userId: authUser._id,
       },
@@ -97,6 +112,7 @@ export const useAuthStore = create((set, get) => ({
       set({ onlineUsers: userIds });
     });
   },
+
   disconnectSocket: () => {
     if (get().socket?.connected) get().socket.disconnect();
   },
