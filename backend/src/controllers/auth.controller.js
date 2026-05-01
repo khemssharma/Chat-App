@@ -56,6 +56,10 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
+    if (!user.password) {
+      return res.status(400).json({ message: "This account uses Google Sign-In. Please sign in with Google." });
+    }
+
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) {
       return res.status(400).json({ message: "Invalid credentials" });
@@ -113,6 +117,65 @@ export const checkAuth = (req, res) => {
     res.status(200).json(req.user);
   } catch (error) {
     console.log("Error in checkAuth controller", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const googleLogin = async (req, res) => {
+  const { access_token } = req.body;
+  try {
+    if (!access_token) {
+      return res.status(400).json({ message: "Google access token required" });
+    }
+
+    // Fetch user info from Google
+    const response = await fetch(
+      `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`
+    );
+
+    if (!response.ok) {
+      return res.status(400).json({ message: "Failed to fetch Google user info" });
+    }
+
+    const googleUser = await response.json();
+
+    if (!googleUser.email_verified) {
+      return res.status(400).json({ message: "Google email not verified" });
+    }
+
+    const { sub: googleId, email, name, picture } = googleUser;
+
+    // Find existing user by googleId or email
+    let user = await User.findOne({ $or: [{ googleId }, { email }] });
+
+    if (user) {
+      // Link googleId if not already linked
+      if (!user.googleId) {
+        user.googleId = googleId;
+        if (picture && !user.profilePic) user.profilePic = picture;
+        await user.save();
+      }
+    } else {
+      // Create new user from Google
+      user = new User({
+        fullName: name,
+        email,
+        googleId,
+        profilePic: picture || "",
+      });
+      await user.save();
+    }
+
+    generateToken(user._id, res);
+
+    res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+      profilePic: user.profilePic,
+    });
+  } catch (error) {
+    console.log("Error in googleLogin controller", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
